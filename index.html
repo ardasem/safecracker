@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151715">
+  <meta name="description" content="A tactile safecracking game. Listen closely, trust your hands, and uncover the story inside.">
+  <title>SAFECRACKER — The workshop</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2320241b%27/%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2721%27 fill=%27none%27 stroke=%27%23c4a46a%27 stroke-width=%274%27/%3E%3Cpath d=%27M19 42 45 22M32 8v9%27 stroke=%27%23c4a46a%27 stroke-width=%275%27/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="pixel-art.js" defer></script>
+  <script src="economy.js" defer></script>
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Safecracker home"><span class="brand-icon" aria-hidden="true">✳</span> SAFECRACKER <span class="brand-sub">LOCK & KEY CO.</span></a>
+      <div class="account"><div><span class="eyebrow">WORKSHOP FUNDS</span><strong id="funds">$0</strong></div><div><span class="eyebrow">REPUTATION</span><strong id="reputation">01 <small>APPRENTICE</small></strong></div><button class="icon-button" id="sound" aria-label="Mute sound" title="Toggle procedural sound" aria-pressed="true">♪</button></div>
+    </header>
+    <main>
+      <div class="page-heading"><div><p class="eyebrow brass" id="chapter">EST. 1984 / YOUR WORKSHOP</p><h1 id="headline">Every lock has a story.</h1><p id="subhead">Steady hands. A good ear. A little patience.</p></div><div class="shop-status"><span class="status-dot"></span><span id="shop-status">OPEN FOR BUSINESS</span><small id="completed">00 JOBS COMPLETED</small></div></div>
+      <nav id="workshop-nav" class="workshop-nav" aria-label="Workshop activities">
+        <button data-view="jobs" aria-pressed="true"><small>01</small> CLIENT JOBS</button>
+        <button data-view="market" aria-pressed="false"><small>02</small> SAFE DEALER</button>
+        <button data-view="auction" aria-pressed="false"><small>03</small> AUCTION HOUSE</button>
+        <button data-view="collection" aria-pressed="false"><small>04</small> MY COLLECTION <span id="collection-count">0</span></button>
+      </nav>
+      <section id="trade-hub" class="trade-hub" aria-label="Workshop trading" hidden></section>
+      <div class="workbench" id="workbench">
+        <section class="scene" aria-label="Safe workbench">
+          <div class="scene-top"><span><i class="tiny-dot"></i> <span id="bench-label">ON THE WORKBENCH</span></span><span id="safe-serial">NO. 001 / SERIES A</span></div>
+          <div class="ambient-light"></div><div class="wall-lines"></div>
+          <div class="safe-wrap" id="safe-wrap">
+            <div class="safe-body">
+              <div class="safe-interior"><div class="interior-label">SOME THINGS ARE WORTH KEEPING.</div><div id="loot-art" class="loot-art"></div><div class="shelf"></div><div class="interior-shadow"></div></div>
+              <div class="safe-door" id="safe-door">
+                <div class="door-inset"></div><div class="rivet r1"></div><div class="rivet r2"></div><div class="rivet r3"></div><div class="rivet r4"></div>
+                <div class="safe-plaque"><span>H A W T H O R N E</span><small>PRECISION SECURITY · 1984</small></div>
+                <div class="dial-assembly" id="dial-assembly"><div class="dial-bezel"></div><div class="dial-indicator"></div><div class="dial" id="dial" role="slider" tabindex="0" aria-label="Combination dial. Right arrow clockwise, left arrow counterclockwise. Shift for fine control." aria-valuemin="0" aria-valuemax="99" aria-valuenow="0"><svg id="dial-face" viewBox="0 0 300 300" aria-hidden="true"></svg><div class="dial-hub"><div class="hub-ring"></div><div class="dial-handle"><span></span></div><div class="hub-cap"></div></div></div></div>
+                <div class="safe-bottom"><span>H—03</span><div class="door-keyhole"></div><span>CAST STEEL</span></div>
+                <div class="bolts"><i></i><i></i><i></i></div>
+              </div>
+              <div class="hinge h1"></div><div class="hinge h2"></div>
+            </div>
+            <div class="safe-foot foot-left"></div><div class="safe-foot foot-right"></div>
+          </div>
+          <div class="bench-surface"></div><div class="bench-rule"></div>
+          <div class="scene-bottom"><span id="scene-caption">BUILT TO KEEP SECRETS.</span><span class="scene-note" id="scene-note">Handcrafted mechanisms. Human intuition.</span></div>
+          <div class="opening-caption" id="opening-caption" aria-live="polite"></div>
+        </section>
+        <aside class="control-panel">
+          <section id="workshop-panel">
+            <div class="panel-heading"><p class="eyebrow brass">THE JOB BOARD</p><span class="small-tag">3 AVAILABLE</span></div><h2>Choose your next story.</h2><p class="panel-intro">A locked safe. A client counting on you.</p>
+            <div id="contracts" class="contracts"></div>
+            <div class="contract-note"><span aria-hidden="true">ⓘ</span><p id="contract-description"></p></div>
+            <button id="start-job" class="primary wide">ACCEPT CONTRACT <span>↗</span></button><p class="under-button">No entry fee. Just you and the mechanism.</p>
+          </section>
+          <section id="game-panel" hidden>
+            <div class="panel-heading"><p class="eyebrow brass" id="job-tier">CONTRACT 01</p><button id="pause" class="text-button">PAUSE Ⅱ</button></div><h2 id="job-title"></h2><p class="panel-intro" id="job-client"></p>
+            <div class="timer-row"><div><span class="eyebrow">TIME REMAINING</span><strong id="timer">01:30</strong></div><span id="payment" class="payment">$100<span>PAYMENT</span></span></div>
+            <div class="tumblers" id="tumblers" aria-label="Tumbler progress"><div><span>01</span><small>SEEKING</small></div><div><span>02</span><small>LOCKED</small></div><div><span>03</span><small>LOCKED</small></div></div>
+            <div class="direction"><span id="direction-icon">↻</span><div><span class="eyebrow">TURN THE DIAL</span><strong id="direction">CLOCKWISE</strong></div><div class="position"><span class="eyebrow">POSITION</span><strong id="position">00.0</strong></div></div>
+            <div class="signal-heading"><span class="eyebrow">ACOUSTIC SIGNAL</span><span id="signal-label">LISTEN CLOSELY</span></div><div class="signal-bars" id="signal-bars" aria-label="Signal strength" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+            <p class="feedback" id="feedback" aria-live="polite">Turn slowly. Feel for the strongest signal.</p>
+            <button id="set-tumbler" class="primary wide">SET TUMBLER <span>↵</span></button>
+            <div class="fine-controls"><button id="nudge-left" aria-label="Turn counterclockwise">←</button><span>DRAG DIAL · A / D · ← / →<small>Hold Shift for fine control · Enter to set</small></span><button id="nudge-right" aria-label="Turn clockwise">→</button></div>
+            <button id="leave-job" class="text-button return-button">← RETURN TO WORKSHOP</button>
+          </section>
+          <section id="result-panel" hidden><p class="eyebrow brass" id="result-eyebrow">ANOTHER SECRET, REVEALED</p><div id="result-mark" class="result-mark">✓</div><h2 id="result-title">Job completed.</h2><p class="panel-intro" id="result-description"></p><div class="found-item" id="found-item"></div><div class="result-stats"><div><span>TIME TAKEN</span><strong id="result-time"></strong></div><div><span>ACCURACY</span><strong id="result-accuracy"></strong></div><div><span id="result-payment-label">CONTRACT PAYMENT</span><strong id="result-payment"></strong></div><div><span id="result-bonus-label">CLIENT TIP</span><strong id="result-bonus"></strong></div></div><div class="total-reward" id="total-reward"><span id="result-total-label">TOTAL EARNED</span><strong id="reward-count">$0</strong></div><p class="rep-earned" id="rep-earned"></p><button id="next-job" class="primary wide">NEXT JOB <span>↗</span></button><button id="result-workshop" class="text-button return-button">← RETURN TO WORKSHOP</button></section>
+        </aside>
+      </div>
+      <section class="equipment" id="equipment"><div class="equipment-heading"><div><span class="eyebrow brass">GOOD TOOLS. BETTER INSTINCTS.</span><h2>Tools of the trade.</h2></div><span class="equipment-note">Invest in your craft.</span></div><div class="upgrade-grid" id="upgrades"></div></section>
+      <footer><span>SAFECRACKER <i>/</i> A LITTLE PATIENCE GOES A LONG WAY.</span><div><a class="text-button" href="pitch.html">ABOUT THE GAME ↗</a><span id="save-status">PROGRESS SAVED LOCALLY</span><button class="text-button" id="reset-progress">RESET PROGRESS</button></div></footer>
+    </main>
+  </div>
+  <div class="overlay" id="modal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><p class="eyebrow brass" id="modal-kicker">TAKE YOUR TIME</p><h2 id="modal-title">On a short break.</h2><p id="modal-copy"></p><button class="primary wide" id="modal-confirm">RESUME JOB</button><button class="text-button return-button" id="modal-cancel">CANCEL</button></section></div>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>

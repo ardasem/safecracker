@@ -1,0 +1,21 @@
+// Packaging checks: the delivered pitch must use the actual game without external assets.
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const read=name=>fs.readFileSync(path.join(__dirname,'..',name),'utf8');
+const page=read('pitch.html');
+const match=page.match(/<script type="application\/json" id="workshop-document">([\s\S]*?)<\/script>/);
+assert(match,'The standalone file must contain its embedded workshop.');
+const workshop=JSON.parse(match[1]);
+for(const file of ['game.js','economy.js','pixel-art.js'])assert(workshop.includes(read(file)),`Must embed current ${file}, not a separate demo implementation.`);
+assert(workshop.includes('window.SafecrackerDemo=true;'));
+for(const id of ['workbench','workshop-nav','contracts','dial','signal-bars','trade-hub','upgrades'])assert(workshop.includes(`id="${id}"`));
+assert(!/<script[^>]+src=/i.test(workshop));
+assert(!/<link[^>]+rel="stylesheet"/i.test(workshop));
+assert(!workshop.includes('assets/workshop-pixel.ttf'));
+assert(workshop.includes('data:font/ttf;base64,'));
+assert(!/href="(?:index|pitch)\.html"/.test(workshop));
+assert(page.includes('sandbox="allow-scripts"'));
+assert(!page.includes('id="trade"'),'Discarded independent trade UI must not be delivered.');
+assert(page.includes(read('pitch.js')));
+console.log('PASS actual workshop UI and current game embedded, offline fonts/assets, safe links, isolated frame, old demo removed');
